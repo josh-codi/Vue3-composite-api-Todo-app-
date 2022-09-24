@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { ref, onBeforeMount } from 'vue';
+import { ref, onBeforeMount, onUpdated } from 'vue';
 
 export default {
     setup() {
@@ -32,7 +32,6 @@ export default {
                 content: newTodo.value
             });
             newTodo.value = "";
-            localStorage.setItem("data", JSON.stringify([...todos.value]));
         };
 
         const toggleDone = (todo) => {
@@ -40,7 +39,7 @@ export default {
         }
 
         const removeTodo = (idx) => {
-            todos.value.splice(idx, 1)
+            todos.value.splice(idx, 1);
         }
 
         const markAllDone = () => {
@@ -53,6 +52,10 @@ export default {
             todos.value = [];
         }
         
+        onUpdated(()=>{
+            localStorage.setItem("data", JSON.stringify([...todos.value]));
+        })
+
         onBeforeMount(()=>{
             todos.value = JSON.parse(localStorage.getItem("data"))
         })
